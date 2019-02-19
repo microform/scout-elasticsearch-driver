@@ -21,8 +21,18 @@ class DocumentPayload extends TypePayload
         }
 
         parent::__construct($model);
-
+        
         $this->payload['id'] = $model->getKey();
         $this->protectedKeys[] = 'id';
+
+        if (method_exists($model, 'searchableParent')) {
+            $this->protectedKeys[] = 'parent';
+            $this->payload['parent'] = $model->searchableParent();
+        }
+
+        if (method_exists($model, 'searchableRouting')) {
+            $this->protectedKeys[] = 'routing';
+            $this->payload['routing'] = $model->searchableRouting();
+        }
     }
 }
